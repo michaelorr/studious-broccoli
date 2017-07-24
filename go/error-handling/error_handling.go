@@ -2,10 +2,10 @@ package erratum
 
 const testVersion = 2
 
-func Use(opener ResourceOpener, input string) (ret_err error) {
-	resource, ret_err := openResource(opener)
-	if ret_err != nil {
-		return ret_err
+func Use(opener ResourceOpener, input string) (retErr error) {
+	resource, retErr := openResource(opener)
+	if retErr != nil {
+		return retErr
 	}
 
 	defer func() {
@@ -13,13 +13,13 @@ func Use(opener ResourceOpener, input string) (ret_err error) {
 			if frobErr, ok := err.(FrobError); ok {
 				resource.Defrob(frobErr.defrobTag)
 			}
-			ret_err = err.(error)
+			retErr = err.(error)
 		}
 		resource.Close()
 	}()
 
 	resource.Frob(input)
-	return ret_err
+	return retErr
 }
 
 func openResource(opener ResourceOpener) (Resource, error) {
